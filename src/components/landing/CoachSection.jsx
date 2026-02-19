@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const CoachSection = () => {
   return (
     <section id="soy-dt" className="rounded-3xl border border-white/10 bg-white/5 px-6 py-12 text-white backdrop-blur md:px-12">
@@ -13,9 +15,12 @@ const CoachSection = () => {
             Gestiona tus visorías, revisa registros y controla asistencia desde un solo panel.
           </p>
         </div>
-        <button className="rounded-full border border-emerald-300/40 px-5 py-2.5 text-sm font-semibold text-emerald-200 transition hover:bg-emerald-400/10">
+        <Link
+          to="/soy-dt"
+          className="rounded-full border border-emerald-300/40 px-5 py-2.5 text-sm font-semibold text-emerald-200 transition hover:bg-emerald-400/10"
+        >
           Iniciar sesión
-        </button>
+        </Link>
       </div>
     </section>
   );

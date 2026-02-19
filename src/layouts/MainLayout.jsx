@@ -1,6 +1,9 @@
-import { Outlet } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 
 const MainLayout = () => {
+  const location = useLocation();
+  const isSoyDtRoute = location.pathname.startsWith("/soy-dt");
+
   return (
     <div className="min-h-screen bg-[#0b0f2a] text-white">
       <header className="sticky top-0 z-20 border-b border-white/10 bg-[#0b0f2a]/80 backdrop-blur">
@@ -20,9 +23,9 @@ const MainLayout = () => {
             <a className="transition hover:text-emerald-200" href="#features">
               Características
             </a>
-            <a className="transition hover:text-emerald-200" href="#soy-dt">
+            <Link className="transition hover:text-emerald-200" to="/soy-dt">
               Soy DT
-            </a>
+            </Link>
             <a className="transition hover:text-emerald-200" href="#contact">
               Contacto
             </a>
@@ -32,7 +35,7 @@ const MainLayout = () => {
           </nav>
         </div>
       </header>
-      <main className="mx-auto w-full max-w-6xl px-6 py-12">
+      <main className={isSoyDtRoute ? "w-full" : "mx-auto w-full max-w-6xl px-6 py-12"}>
         <Outlet />
       </main>
       <footer className="border-t border-white/10 bg-[#0b0f2a]">
