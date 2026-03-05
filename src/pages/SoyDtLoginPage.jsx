@@ -1,11 +1,28 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 
 const SoyDtLoginPage = () => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (event) => {
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    setError(null);
+    setIsLoading(true);
+    try {
+      await login(email, password);
+      navigate("/dashboard");
+    } catch (err) {
+      setError(err.message || "Error al iniciar sesión.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -30,39 +47,46 @@ const SoyDtLoginPage = () => {
             <h2 className="mt-3 text-4xl font-bold text-white">Iniciar sesión</h2>
 
             <form className="mt-10 flex flex-col gap-4" onSubmit={handleSubmit}>
-              <label className="sr-only" htmlFor="username">
-                Usuario
-              </label>
+              <label className="sr-only" htmlFor="email">Correo</label>
               <input
-                id="username"
-                type="text"
-                value={username}
-                onChange={(event) => setUsername(event.target.value)}
-                placeholder="Usuario"
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Correo electrónico"
                 className="w-full rounded-full border border-white/15 bg-[#0f1433] px-5 py-3.5 text-base text-white outline-none transition placeholder:text-white/40 focus:border-emerald-300/60 focus:ring-2 focus:ring-emerald-300/20"
-                autoComplete="username"
+                autoComplete="email"
                 required
               />
 
-              <label className="sr-only" htmlFor="password">
-                Contraseña
-              </label>
+              <label className="sr-only" htmlFor="password">Contraseña</label>
               <input
                 id="password"
                 type="password"
                 value={password}
-                onChange={(event) => setPassword(event.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="Contraseña"
                 className="w-full rounded-full border border-white/15 bg-[#0f1433] px-5 py-3.5 text-base text-white outline-none transition placeholder:text-white/40 focus:border-emerald-300/60 focus:ring-2 focus:ring-emerald-300/20"
                 autoComplete="current-password"
                 required
               />
 
+              {error && (
+                <p className="rounded-xl bg-red-500/10 px-4 py-2.5 text-sm text-red-400">
+                  {error}
+                </p>
+              )}
+
               <button
                 type="submit"
-                className="mt-3 w-full rounded-full bg-emerald-300 px-6 py-3.5 text-base font-semibold text-emerald-950 transition hover:bg-emerald-200"
+                disabled={isLoading}
+                className="mt-3 flex w-full items-center justify-center rounded-full bg-emerald-300 px-6 py-3.5 text-base font-semibold text-emerald-950 transition hover:bg-emerald-200 disabled:opacity-60"
               >
-                Entrar
+                {isLoading ? (
+                  <span className="h-5 w-5 animate-spin rounded-full border-2 border-emerald-900 border-t-transparent" />
+                ) : (
+                  "Entrar"
+                )}
               </button>
             </form>
           </div>
